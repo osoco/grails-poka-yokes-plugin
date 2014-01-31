@@ -43,6 +43,9 @@ grails.project.dependency.resolution = {
 			exclude 'org.aspectj:aspectjrt'
 		}
 		compile("org.aspectj:aspectjrt:1.7.3")
+
+		// Poka-Yokes dependencies
+		compile("org.hibernate:hibernate-core:3.6.10.Final")
     }
 
     plugins {
