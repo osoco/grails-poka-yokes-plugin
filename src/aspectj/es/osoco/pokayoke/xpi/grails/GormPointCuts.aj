@@ -1,4 +1,4 @@
-package es.osoco.aop.grails.xpi;
+package es.osoco.pokayoke.xpi.grails;
 
 import org.codehaus.groovy.runtime.callsite.CallSite;
 

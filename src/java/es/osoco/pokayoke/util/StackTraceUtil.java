@@ -1,4 +1,4 @@
-package es.osoco.aop.grails.pokayoke.util;
+package es.osoco.pokayoke.util;
 
 import java.util.Arrays;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
-package es.osoco.aop.grails.pokayoke;
+package es.osoco.pokayoke.grails;
 
-import es.osoco.aop.grails.pokayoke.util.StackTraceUtil;
-import es.osoco.aop.grails.xpi.GrailsPointCuts;
+import es.osoco.pokayoke.util.StackTraceUtil;
+import es.osoco.pokayoke.xpi.grails.GrailsPointCuts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

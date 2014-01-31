@@ -1,6 +1,6 @@
-package es.osoco.aop.grails.pokayoke;
+package es.osoco.pokayoke.grails;
 
-import es.osoco.aop.grails.xpi.GroovyPointCuts;
+import es.osoco.pokayoke.xpi.grails.GroovyPointCuts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

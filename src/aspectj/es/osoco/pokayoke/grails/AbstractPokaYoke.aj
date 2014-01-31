@@ -1,6 +1,6 @@
-package es.osoco.aop.grails.pokayoke;
+package es.osoco.pokayoke.grails;
 
-import es.osoco.aop.grails.pokayoke.util.StackTraceUtil;
+import es.osoco.pokayoke.util.StackTraceUtil;
 
 import org.apache.commons.logging.Log;
 import org.aspectj.lang.JoinPoint;

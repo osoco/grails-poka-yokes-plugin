@@ -1,4 +1,4 @@
-package es.osoco.aop.grails.pokayoke;
+package es.osoco.pokayoke.grails;
 
 public class PokaYokeViolationException extends RuntimeException {
 
