@@ -24,16 +24,29 @@ includeTargets << grailsScript("_GrailsEvents")
 
 def pokaYokesConfig
 
-target('weaveAspects': "Weave poka-yoke aspects") {
-	depends(pokaYokesConfiguration)
-    if (isAspectWeavingEnabled()) {
+target('weavePokaYokes': "Weave poka-yoke aspects") {
+	depends(configurePokaYokes)
+    if (isPokaYokingEnabled()) {
         doWeaving()
     } else {
         event("StatusFinal", ["Weaving aspects...Disabled!"])
     }
 }
 
-target('doWeaving': "") {
+/*
+ * Avoid the weaving error caused when aspects are applied to already weaved classes.
+ *
+ * The root cause is eventCompileEnd event is fired more than once while running 
+ * integration tests (GRAILS-9741).
+ */
+target('preCompilePokaYokes': "Clean compiled classes to avoid double-weaving") {
+	depends(configurePokaYokes)
+    if (isPokaYokingEnabled()) {
+        cleanPokaYokes()
+    }
+}
+
+target('doWeaving': "Compile-time weaving from aspect sources") {
     event("StatusUpdate", ["Weaving aspects..."])
     ant.taskdef(name: 'iajc', classname: 'org.aspectj.tools.ant.taskdefs.AjcTask')   
     ant.path(id: "iajc.classpath", runtimeClasspath)
@@ -46,13 +59,13 @@ target('doWeaving': "") {
     	    pathelement(path: grailsSettings.classesDir)
     	}
     	sourceRoots() {
-    	    pathelement(path: "${pluginBasedir}/src/aspectj")
+    	    pathelement(path: "${pokaYokesPluginDir}/src/aspectj")
     	}
     }
     event("StatusFinal", ["Weaving aspects...OK!"])
 }
 
-target('pokaYokesConfiguration': 'Parse Poka Yokes configuration') {
+target('configurePokaYokes': 'Parse Poka Yokes configuration') {
     if (!pokaYokesConfig) {
 		event('StatusFinal', ['Configuring Poka-Yokes plugin...'])
 		// TODO: Merge DefaultPokaYokesConfig with custom PokaYokesConfig
@@ -61,9 +74,20 @@ target('pokaYokesConfiguration': 'Parse Poka Yokes configuration') {
     }
 }
 
-isAspectWeavingEnabled = {
-    def isDisabledByProperty = 
-	    Boolean.valueOf(System.getProperty('DISABLE_POKA_YOKE', 'false'))
+isPokaYokingEnabled = {
 	// TODO: Use pokaYokesConfig.enablePokaYokesClosure
-    ((grailsSettings.grailsEnv != 'PRODUCTION') && (!isDisabledByProperty))
+    !isPokaYokingDisabledByProperty()
+}
+
+isPokaYokingDisabledByProperty = {
+    Boolean.valueOf(System.getProperty('DISABLE_POKA_YOKING', 'false'))
+}
+
+cleanPokaYokes = {
+    event("StatusUpdate", ["Cleaning classes before poka-yoking"])
+    clean()
+    ant.delete(failonerror: false, includeemptydirs: false) {
+        fileset(dir: grailsSettings.projectTargetDir, includes: "**/*") 
+    }
+    event("StatusFinal", ["Cleaned up target dir before poka-yoking"])
 }
