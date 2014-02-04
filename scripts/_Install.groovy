@@ -1,2 +1,2 @@
-ant.copy(file: "${pluginBasedir}/grails-app/conf/PokaYokesConfig.groovy",
+ant.copy(file: "${pluginBasedir}/src/samples/PokaYokesConfig.groovy",
     todir: "${basedir}/grails-app/conf")

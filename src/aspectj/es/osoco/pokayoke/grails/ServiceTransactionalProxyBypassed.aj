@@ -1,10 +1,8 @@
 package es.osoco.pokayoke.grails;
 
+import es.osoco.pokayoke.PokaYokePriority;
 import es.osoco.pokayoke.util.StackTraceUtil;
 import es.osoco.pokayoke.xpi.grails.GrailsPointCuts;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import org.codehaus.groovy.runtime.callsite.CallSite;
 import org.hibernate.collection.PersistentSet;
@@ -12,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ClassUtils;
 
 public aspect ServiceTransactionalProxyBypassed extends AbstractPokaYoke {
-
-    private final Log LOGGER = LogFactory.getLog(ServiceTransactionalProxyBypassed.class);
 
     public pointcut annotatedPublicServiceMethod(Object receiver, Transactional tx) :
 	GrailsPointCuts.publicServiceMethod() && @annotation(tx) && this(receiver);
@@ -44,10 +40,6 @@ public aspect ServiceTransactionalProxyBypassed extends AbstractPokaYoke {
     // 	}
     // }
 
-    public Log getLogger() {
-	return LOGGER;
-    }
-
     public String getDescription() {
 	return "Service transactional proxy has been bypassed. \n" +
 	    "Be careful when calling annotated methods within a service when the annotation settings are different. " +
@@ -55,7 +47,11 @@ public aspect ServiceTransactionalProxyBypassed extends AbstractPokaYoke {
 	    "done will be bypassed.";
     }
 
-    private static boolean isCalledThroughProxy() {
+	public PokaYokePriority getPriority() {
+		return PokaYokePriority.HIGH;
+	}
+
+    protected static boolean isCalledThroughProxy() {
 	StackTraceElement[] elements = Thread.currentThread().getStackTrace();
 	StackTraceElement callerElement = elements[3];
 	boolean isCglibProxy = ClassUtils.isCglibProxyClassName(callerElement.getClassName());
@@ -63,9 +59,3 @@ public aspect ServiceTransactionalProxyBypassed extends AbstractPokaYoke {
     }
 
 }
-
-
-
-
-
-

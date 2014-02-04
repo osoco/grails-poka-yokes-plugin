@@ -10,12 +10,17 @@ public abstract class StackTraceUtil {
 
     private static final List<String> IGNORED_PACKAGES = Arrays.asList(
         "com.springsource.loaded.",
-	"groovy.lang.",
-	"java.lang.",
-	"sun.",
-	"org.codehaus.groovy.reflection.",
-	"org.codehaus.groovy.runtime.",
-	"es.osoco.aop");
+        "groovy.lang.",
+        "java.lang.",
+        "sun.",
+        "org.codehaus.groovy.reflection.",
+        "org.codehaus.groovy.runtime.",
+        "es.osoco.pokayoke.grails.",
+        "es.osoco.pokayoke.util.",
+        "es.osoco.pokayoke.xpi.",
+		"es.osoco.pokayoke.PokaYokesListener",
+		"DefaultPokaYokesConfig"
+    );
 
 
     public static String sanitizedStack() {

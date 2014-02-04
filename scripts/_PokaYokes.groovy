@@ -48,11 +48,11 @@ target('preCompilePokaYokes': "Clean compiled classes to avoid double-weaving") 
 
 target('doWeaving': "Compile-time weaving from aspect sources") {
     event("StatusUpdate", ["Weaving aspects..."])
-    ant.taskdef(name: 'iajc', classname: 'org.aspectj.tools.ant.taskdefs.AjcTask')   
+    ant.taskdef(name: 'iajc', classname: 'org.aspectj.tools.ant.taskdefs.AjcTask')
     ant.path(id: "iajc.classpath", runtimeClasspath)
 	// TODO: Use pokaYokesConfig options
     ant.iajc(classpathref: "iajc.classpath", 
-	        destdir: grailsSettings.classesDir, 
+			destdir: grailsSettings.classesDir, 
             source: '1.5', 
 	        showWeaveInfo: true) {
     	inpath() {
@@ -66,21 +66,27 @@ target('doWeaving': "Compile-time weaving from aspect sources") {
 }
 
 target('configurePokaYokes': 'Parse Poka Yokes configuration') {
-    if (!pokaYokesConfig) {
+	/*
+    if ((isPokaYokingEnabled()) && (!pokaYokesConfig)) {
 		event('StatusFinal', ['Configuring Poka-Yokes plugin...'])
 		// TODO: Merge DefaultPokaYokesConfig with custom PokaYokesConfig
 		def configPath = "${grailsSettings.baseDir}/grails-app/conf/PokaYokesConfig.groovy"
 		pokaYokesConfig = new ConfigSlurper().parse(new URL("file://${configPath}"))
     }
+	*/
 }
 
 isPokaYokingEnabled = {
 	// TODO: Use pokaYokesConfig.enablePokaYokesClosure
-    !isPokaYokingDisabledByProperty()
+    !isPluginProject() && !isPokaYokingDisabledByProperty()
 }
 
 isPokaYokingDisabledByProperty = {
     Boolean.valueOf(System.getProperty('DISABLE_POKA_YOKING', 'false'))
+}
+
+isPluginProject = {
+	grailsSettings.isPluginProject()
 }
 
 cleanPokaYokes = {

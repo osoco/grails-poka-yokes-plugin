@@ -20,6 +20,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import es.osoco.pokayoke.PokaYokesConfigFactory
+import es.osoco.pokayoke.PokaYokesListener
+import es.osoco.pokayoke.util.PokaYokesUtils
+
 class PokaYokesGrailsPlugin {
 
     def version = "0.1"
@@ -38,5 +42,24 @@ class PokaYokesGrailsPlugin {
         system: "GitHub", 
         url: "https://github.com/osoco/grails-poka-yokes-plugin/issues"
     ]
+
+	def doWithSpring = {
+		
+		def conf = PokaYokesUtils.pokaYokesConfig
+		if (!conf || !conf.pokaYokes.global.enabled) {
+			println '\n\nGrails Poka-Yokes are disabled, not loading.\n\n'
+			return
+		}
+		println 'Configuring Grails Poka-Yokes...'		
+
+		pokaYokesConfigFactory(PokaYokesConfigFactory) {
+			pokaYokesConfig = conf
+		}
+
+		pokaYokesListener(PokaYokesListener) {
+			configFactory = ref('pokaYokesConfigFactory')
+		}
+
+	}
 
 }

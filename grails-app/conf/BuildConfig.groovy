@@ -39,17 +39,17 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.27'
 
 		// AspectJ dependencies
-		build("org.aspectj:aspectjtools:1.7.3") {
+		build("org.aspectj:aspectjtools:1.7.4") {
 			exclude 'org.aspectj:aspectjrt'
 		}
-		compile("org.aspectj:aspectjrt:1.7.3")
+		runtime("org.aspectj:aspectjrt:1.7.4")
 
 		// Poka-Yokes dependencies
 		compile("org.hibernate:hibernate-core:3.6.10.Final")
     }
 
     plugins {
-        build(":release:3.0.1",
+        build(":release:2.2.1",
               ":rest-client-builder:1.0.3") {
             export = false
         }
